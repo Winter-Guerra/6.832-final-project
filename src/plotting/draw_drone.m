@@ -1,4 +1,4 @@
-function h = draw_drone( drone, color_body, alpha, axes_only )
+function h = draw_drone( drone, color_body, alpha, axes_only)
 %DRAW_DRONE(drone, alpha, axes_only) draws a drone cartoon
 
 if isempty(drone)
