@@ -18,7 +18,7 @@ theta = (0:n-1)*n_to_radian;
 % continuous loop equation
 %x^2 + z^2 = radius^2;
 x = r*sin(theta);
-z = r - cos(theta);
+z = r - r*cos(theta);
 
 % Velocities
 dtheta = ones(1,n)*2*pi/t;
