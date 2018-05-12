@@ -6,9 +6,9 @@ function [state] = quadrotorDynamics2d (state, inputs, constants)
 w_dot = inv(constants.J) * inputs.torque;
 state(6) = state(6) + w_dot * constants.dt;
 
-state(3) = state(3) + w * constants.dt;
+state(3) = state(3) + state(6) * constants.dt;
 
-vz_dot = g + inputs.thrust * sin(state(3));
+vz_dot = constants.g + inputs.thrust * sin(state(3));
 vx_dot = inputs.thrust * cos(state(3));
 
 state(4) = state(4) + vx_dot * constants.dt;
