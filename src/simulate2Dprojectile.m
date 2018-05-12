@@ -39,22 +39,25 @@ t = 0:0.01:0.5;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 states = [];
+pitch_vec = [];
+
 
 for i = 2:length(t)
-    constants.dt = 0.01;  
-    u = [0.01 0]; % F_1, F_2
+    constants.dt = 0.01;
+    % Define the width of the quadrotor (distance between motors)
+    constants.baseline = 0.1;
     
+    % Calculate input from controller
+    u = [50.0 0]; % F_1, F_2
+    
+    % Simulate next step in dynamics
     x = quadrotorDynamics2d(x, u, constants);
     
+    % Populate vector of states for later visualization
     state.position = [x(1) 0 x(2)];
     state.velocity = [x(4) 0 x(5)];
-    state.angularVelocity = [0 0 0];
-
-    % Use a zero centered circle for simplicity
-    radius_vec  = [x(1) x(2)];
-    tangent_vec = null(radius_vec(:)');
-    pitch = -atan2(tangent_vec(2), tangent_vec(1));
-    state.rotation = eul2rotm([0 pitch 0]);
+    state.angularVelocity = [0 x(6) 0];
+    state.rotation = eul2rotm([0 x(3) 0]);
     
     traj(i,1:3) = state.position';
     traj(i,4:6) = rotm2eul(state.rotation, 'zyx');
