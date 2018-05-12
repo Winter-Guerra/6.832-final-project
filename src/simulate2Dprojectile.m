@@ -42,10 +42,9 @@ states = [];
 
 for i = 2:length(t)
     constants.dt = 0.01;  
-    inputs.thrust = 0;
-    inputs.torque = 0;
+    u = [0.01 0]; % F_1, F_2
     
-    x = quadrotorDynamics2d(x, inputs, constants);
+    x = quadrotorDynamics2d(x, u, constants);
     
     state.position = [x(1) 0 x(2)];
     state.velocity = [x(4) 0 x(5)];

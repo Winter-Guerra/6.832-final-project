@@ -31,6 +31,6 @@ for i = 1:size(state,1)
     transformMatrix(1:3,1:3) = state(i).rotation;
     transformMatrix(1:3,4) = state(i).position'; 
     set (ht, 'Matrix', transformMatrix);
-    pause(1);
+    pause(.1);
 end
 end
