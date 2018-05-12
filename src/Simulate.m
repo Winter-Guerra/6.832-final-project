@@ -1,4 +1,4 @@
-function Simulate(state, fig)
+function Simulate(traj,state, fig)
 
 figure(fig);
 holdFig = ishandle(fig);
@@ -15,17 +15,20 @@ zlabel('z')
 
 axis equal;
 grid on;
-axis([-10 10 -10 10 -10 10]);
-plot3 (state(:,1), state(:,2), state(:,3))
+%axis([-10 10 -10 10 -10 10]);
+plot3 (traj(:,1), traj(:,2), traj(:,3))
 
 h  = draw_drone([], 'b',1,0);
 ht = hgtransform('Parent', gca); 
 set(h, 'Parent', ht);
 
-for i = 1:10:size(state,1)
+for i = 1:size(state,1)
     hold off;
-    txy = makehgtform('translate', state(i,1:3),'zrotate', state(i,4), 'yrotate', state(i,5), 'xrotate', state(i,6));
-    set (ht, 'Matrix', txy);
-    pause(0.1);
+    %txy = makehgtform('translate', state(i,1:3),'zrotate', state(i,4), 'yrotate', state(i,5), 'xrotate', state(i,6));
+    transformMatrix = eye(4);
+    transformMatrix(1:3,1:3) = state(i).rotation;
+    transformMatrix(1:3,4) = state(i).position'; 
+    set (ht, 'Matrix', transformMatrix);
+    pause(1);
 end
 end

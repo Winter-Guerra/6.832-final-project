@@ -76,6 +76,7 @@ thrust_plot = [0];
 
 %% Simulate the loop
 thetas = [];
+states = [state];
 
 for i = 2:length(tau)
     
@@ -117,6 +118,7 @@ for i = 2:length(tau)
     %state.rotation = eul2rotm([0 -pitch(i) 0]);
     traj(i,1:3) = state.position';
     traj(i,4:6) = rotm2eul(state.rotation, 'zyx');
+    states = [states;state];
     
     T = [T, T(end) + constants.dt];
     
@@ -142,7 +144,7 @@ axis equal;
 
 %figure(2);
 
-Simulate(traj, 2);
+Simulate(traj, states,2);
 
 % 
 % %%
