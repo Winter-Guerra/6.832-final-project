@@ -58,7 +58,7 @@ state.angularVelocity = [0; 0; 0];
 
 thrust = [0 0 0];
 %thrust = [thrust; zeros(199,1), zeros(199,1), diff(vel)'/0.01];
-thrust = [thrust; diff(v_x)'/0.01 zeros(199,1) ones(199,1)*g/5]; %+diff(v_z)'/0.01];
+thrust = [thrust; zeros(199,1) zeros(199,1) ones(199,1)*g/5]; %+diff(v_z)'/0.01];
 thrust = [thrust; zeros(floor(TT/0.01), 3)];
 
 
@@ -67,6 +67,10 @@ thetas = [];
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 states = [];
+r = sqrt(state.position(1)^2 + state.position(3)^2)
+p = -pi/2 - asin(state.position(3)/ r);
+p*180/pi
+state.rotation = eul2rotm([0 -p 0]);
 
 for i = 2:length(t)-10
     constants.dt = 0.01;  
