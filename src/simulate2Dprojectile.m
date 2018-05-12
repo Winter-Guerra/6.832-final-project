@@ -33,15 +33,9 @@ vz    = v0 * sin(theta);
 
 %% Simulate the loop
 thetas = [];
-
-
-r = sqrt(state.position(1)^2 + state.position(3)^2)
-p = -pi/2 - asin(state.position(3)/ r);
-p*180/pi
-state.rotation = eul2rotm([0 -p 0]);
-
+state.rotation = eul2rotm([0 0 0]);
 x = [1 0 theta vx vz 0];
-t = 0:0.01:2.0;
+t = 0:0.01:0.5;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 states = [];
@@ -56,11 +50,12 @@ for i = 2:length(t)
     state.position = [x(1) 0 x(2)];
     state.velocity = [x(4) 0 x(5)];
     state.angularVelocity = [0 0 0];
-    r = sqrt(state.position(1)^2 + state.position(3)^2);
-    p = -pi/2 - asin(state.position(3)/ r);
-    p*180/pi
-    state.rotation = eul2rotm([0 -p 0]);
-    
+
+    % Use a zero centered circle for simplicity
+    radius_vec  = [x(1) x(2)];
+    tangent_vec = null(radius_vec(:)');
+    pitch = -atan2(tangent_vec(2), tangent_vec(1));
+    state.rotation = eul2rotm([0 pitch 0]);
     
     traj(i,1:3) = state.position';
     traj(i,4:6) = rotm2eul(state.rotation, 'zyx');
