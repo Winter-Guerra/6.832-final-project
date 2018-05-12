@@ -58,11 +58,10 @@ for rot = pi/2:pi/2:2*pi
     set(trans_cyl(1),'Matrix',makehgtform('zrotate',rot));
 end
 
-fig = gcf;
-h = hgtransform('Parent',fig.CurrentAxes);
+h = hgtransform('Parent',gca);
+set(ax,'Parent',h)
 set(props,'Parent',h)
 set(cube,'Parent',h)
-set(ax,'Parent',h)
 set(cyl_transform,'Parent',h)
 
 end
