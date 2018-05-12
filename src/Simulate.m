@@ -17,6 +17,7 @@ axis equal;
 grid on;
 %axis([-10 10 -10 10 -10 10]);
 plot3 (traj(:,1), traj(:,2), traj(:,3))
+view(0,0);
 
 h  = draw_drone([], 'b',1,0);
 ht = hgtransform('Parent', gca); 
