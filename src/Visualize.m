@@ -1,4 +1,4 @@
-function Simulate(x_vec, fig)
+function Visualize(x_vec, fig)
 
 % X_vec is size (t, len(x)). E.g. one row for each t_i.
 [num_t, len_x] = size(x_vec); 

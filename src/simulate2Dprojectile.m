@@ -63,4 +63,4 @@ axis equal;
 
 figure(2);
 
-Simulate(x_vec, 2);
+Visualize(x_vec, 2);

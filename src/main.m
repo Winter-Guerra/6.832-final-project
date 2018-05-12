@@ -144,7 +144,7 @@ axis equal;
 
 %figure(2);
 
-Simulate(traj, states,2);
+Visualize(traj, states,2);
 
 % 
 % %%
@@ -230,4 +230,4 @@ Simulate(traj, states,2);
 % 
 % %figure(2);
 % 
-% Simulate(traj, 2);
+% Visualize(traj, 2);
