@@ -13,7 +13,7 @@ u_f = [-constants.m*constants.g/2, -constants.m*constants.g/2];
 [A,B] = getLinearizedDynamics(x_f, u_f, constants);
 
 % Pick a reasonable positive semi-definite state cost matrix Q
-Q = diag([10,10,1,1,1,1]);
+Q = diag([2,2,1,1,1,1]);
 
 % Pick a reasonable positive semi-definite input cost matrix R
 R = eye(2);

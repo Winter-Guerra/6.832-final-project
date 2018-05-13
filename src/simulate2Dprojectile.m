@@ -10,27 +10,9 @@ addpath('plotting');
 radius   = 1.0;
 velocity = 1;
 sim_dt   = 0.1;
-<<<<<<< HEAD
-constants.m  = 1;
-% constants.dt = sim_dt;
-g = 9.8;
-%g=0.1;
-J = 5e-2;
-simulationTime = 200 / sim_dt;
-
-% Set all constants
-constants.g  = -g;
-constants.J  = J;
-constants.tmax = 3*g;
-constants.dt = 0.01;
-constants.radius = radius;
-% Define the width of the quadrotor (distance between motors)
-constants.baseline = 0.1;
-=======
 simulationTime = 200 / sim_dt;
 
 [constants] = getConstants();
->>>>>>> 0fd0b005e9257e3ebaee04ab6c9d5fffaf841da9
 
 T = [0];
 
