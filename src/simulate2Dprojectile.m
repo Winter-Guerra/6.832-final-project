@@ -25,7 +25,8 @@ vz    = v0 * sin(theta);
 
 %% Simulate the loop
 x_vec = [];
-x = [1 0 0 vx vz 0];
+u_vec = [];
+x = [0 -1 0 0 0 0];
 t = 0:0.01:0.5;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
@@ -37,7 +38,9 @@ for i = 2:length(t)
     p_f = [0,0];
     
     % Position controller for a specific point.
-    %u = lqrPositionController(p_f, constants);
+    u = lqrPositionController(p_f, x, constants);
+    
+    u_vec = [u_vec; u'];
     
     % Assure that actuation limits are followed
     u = max(u, 0);
@@ -54,6 +57,7 @@ for i = 2:length(t)
 end
 
 figure(1); 
+plot(u_vec(1,:), u_vec(2,:));
 %plot(t(1,:), t(2,:), 'r');
 %hold on; plot(traj(:,1), traj(:,3),'gx');
 %hold on; quiver(traj(1:5:end,1), traj(1:5:end,3), 0.01 * cos(pitch(1:5:end)), 0.01 * sin(pitch(1:5:end)) ); 

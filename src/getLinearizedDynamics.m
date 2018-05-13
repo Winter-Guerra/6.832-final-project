@@ -30,16 +30,16 @@ df_du = jacobian(f_system, u_sym);
 % For df_dx_at_x_f, set u=0 since the system is control affine.
 df_dx_at_x_f = subs(df_dx, ...
     {x_sym(1),x_sym(2),x_sym(3),x_sym(4),x_sym(5),x_sym(6),u_sym(1),u_sym(2)}, ...
-    {x_f(1)  ,x_f(2)  ,x_f(3)  ,x_f(4)  ,x_f(5)  ,x_f(6)  ,u_f(1)  ,u_f(2)});
+    {x_f(1)  ,x_f(2)  ,x_f(3)  ,x_f(4)  ,x_f(5)  ,x_f(6)  u_f(1)  ,u_f(2)});
 
 
-%disp(df_dx)
+disp(df_dx)
 
 df_du_at_x_f = subs(df_du, ...
     {x_sym(1),x_sym(2),x_sym(3),x_sym(4),x_sym(5),x_sym(6),u_sym(1),u_sym(2)}, ...
     {x_f(1)  ,x_f(2)  ,x_f(3)  ,x_f(4)  ,x_f(5)  ,x_f(6)  ,u_f(1)  ,u_f(2)});
 
-%disp(df_du)
+disp(df_du)
 
 
 A = double(df_dx_at_x_f);
