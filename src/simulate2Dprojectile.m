@@ -27,11 +27,11 @@ vz    = v0 * sin(theta);
 x_vec = [];
 u_vec = [];
 x = [0 0 0 0 0 0];
-t = 0:0.01:5.0;
+t = 0:0.01:3.75;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 
-x = [0 0 0 0 0 0];
+x = [0 10 -pi 0 0 .1];
 %[u,t, x] = controllerEnergy(x, [], constants);
 pitch_vec = [x(3)];
 states = [];
@@ -47,7 +47,7 @@ for i = 2:length(t)
     %x = quadrotorDynamics2d(x, uin, constants);
 
     u = [10.0 5]; % F_1, F_2
-    p_f = [-1,1, -pi/4];
+    p_f = [0,0, 0];
     
     % Position controller for a specific point.
     u = lqrPositionController(p_f, x, constants);
