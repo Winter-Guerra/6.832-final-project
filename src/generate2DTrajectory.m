@@ -23,27 +23,6 @@ x_dot_vec = velocity_tan.*cos(theta);
 z_dot_vec = velocity_tan*-1.*sin(theta);
 d_theta = -velocity_tan/(2*pi*constants.radius);
 
-% 
-% % Length of trajectory
-% l = 2*pi*r;
-% t = l/v_nominal;
-% 
-% % Number of discrete samples
-% n = ceil(t/dt);
-% 
-% % Make some vectors
-% n_to_radian = 2*pi/n;
-% theta = (0:n-1)*n_to_radian;
-% 
-% % continuous loop equation
-% %x^2 + z^2 = radius^2;
-% x = r*sin(theta);
-% z = r - r*cos(theta);
-% 
-% % Velocities
-% dtheta = ones(1,n)*2*pi/t;
-% dx = v_nominal*cos(theta);
-% dz = v_nominal*sin(theta);
 
 % Populate positions in trajectory
 trajectory = [x_vec', z_vec', theta'-pi/2, x_dot_vec', z_dot_vec', d_theta'];
