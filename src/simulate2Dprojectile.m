@@ -25,7 +25,7 @@ vz    = v0 * sin(theta);
 
 %% Simulate the loop
 x_vec = [];
-x = [1 0 theta vx vz 0];
+x = [1 0 0 vx vz 0];
 t = 0:0.01:0.5;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
@@ -33,7 +33,11 @@ pitch  = zeros(length(t), 1);
 
 for i = 2:length(t)    
     % Calculate input from controller
-    u = [50.0 0]; % F_1, F_2
+    u = [10.0 5]; % F_1, F_2
+    p_f = [0,0];
+    
+    % Position controller for a specific point.
+    %u = lqrPositionController(p_f, constants);
     
     % Assure that actuation limits are followed
     u = max(u, 0);

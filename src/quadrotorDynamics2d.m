@@ -13,8 +13,8 @@ thrust = sum(u);
 
 % Calculate x_dot
 w_dot = inv(constants.J) * tau_body;
-vz_dot = constants.g + thrust * sin(x(3));
-vx_dot = thrust * cos(x(3));
+vz_dot = constants.g + thrust * cos(x(3));
+vx_dot = thrust * sin(x(3));
 
 x_dot = [x(4), x(5), x(6), vx_dot, vz_dot, w_dot];
 
