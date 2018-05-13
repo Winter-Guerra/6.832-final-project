@@ -3,9 +3,9 @@ function [u] = lqrPositionController(p_f, x, constants)
 % Assumes level hover.
 
 % Find stable fixed point
-x_f = [p_f 0.1 0 0 0];
+x_f = [p_f 0 0 0];
 % Nominal thrust should counteract gravity
-u_f = [-constants.m*constants.g/2 -constants.m*constants.g/2];
+u_f = [-constants.m*constants.g/2, -constants.m*constants.g/2];
 
 %u_f = [0 0];
 
@@ -13,7 +13,7 @@ u_f = [-constants.m*constants.g/2 -constants.m*constants.g/2];
 [A,B] = getLinearizedDynamics(x_f, u_f, constants);
 
 % Pick a reasonable positive semi-definite state cost matrix Q
-Q = diag([10,10,3,1,1,1]);
+Q = diag([10,10,1,1,1,1]);
 
 % Pick a reasonable positive semi-definite input cost matrix R
 R = eye(2);
@@ -27,7 +27,7 @@ N = zeros(6,2);
 
 x_bar = x - x_f;
 
-u = -K * x_bar';
+u = -K*x_bar' + u_f';
 
 end
 
