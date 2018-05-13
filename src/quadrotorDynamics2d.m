@@ -11,7 +11,7 @@ u_clipped = max(u, 0);
 tau_body = (u_clipped(1) - u_clipped(2))*constants.baseline/2;
 
 % Calculate total thrust
-thrust = sum(u_clipped);
+thrust = sum(u_clipped)
 
 %Update the state
 w_dot = inv(constants.J) * tau_body;
@@ -19,8 +19,8 @@ x(6) = x(6) + w_dot * constants.dt;
 
 x(3) = x(3) + x(6) * constants.dt;
 
-vz_dot = constants.g + thrust * sin(x(3));
-vx_dot = thrust * cos(x(3));
+vz_dot = constants.g + thrust * cos(x(3));
+vx_dot = thrust * sin(x(3));
 
 x(4) = x(4) + vx_dot * constants.dt;
 x(5) = x(5) + vz_dot * constants.dt;

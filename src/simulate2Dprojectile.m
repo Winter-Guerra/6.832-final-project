@@ -15,11 +15,14 @@ constants.m  = 1;
 g = 9.8;
 %g=0.1;
 J = 5e-2;
+simulationTime = 200 / sim_dt;
+
+% Set all constants
 constants.g  = -g;
 constants.J  = J;
-simulationTime = 200 / sim_dt;
 constants.tmax = 3*g;
 constants.dt = 0.01;
+constants.radius = radius;
 % Define the width of the quadrotor (distance between motors)
 constants.baseline = 0.1;
 
@@ -39,27 +42,32 @@ t = 0:0.01:0.5;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 
+x = [0 0 0 0 0 0];
+[u,t, x] = controllerEnergy(x, [], constants);
+pitch_vec = [x(3)];
+states = [];
+
 
 for i = 2:length(t)    
     % Calculate input from controller
-    u = [50.0 0]; % F_1, F_2
+    %u = [50.0 0]; % F_1, F_2
+    constants.dt = t(i) - t(i-1);
+    uin = u(i,:);
     
     % Simulate next step in dynamics
-    x = quadrotorDynamics2d(x, u, constants);
+    x = quadrotorDynamics2d(x, uin, constants);
     
     % Populate vector of states for later visualization
     x_vec = [x_vec; x];    
-    %traj(i,1:3) = [x(1) 0 x(2)]';
-    %traj(i,4:6) = rotm2eul(x(3), 'zyx');
     
     T = [T, T(end) + constants.dt];
 end
 
 figure(1); 
+plot(x_vec(:,3));
 %plot(t(1,:), t(2,:), 'r');
 %hold on; plot(traj(:,1), traj(:,3),'gx');
 %hold on; quiver(traj(1:5:end,1), traj(1:5:end,3), 0.01 * cos(pitch(1:5:end)), 0.01 * sin(pitch(1:5:end)) ); 
-axis equal;
 
 figure(2);
 
