@@ -11,7 +11,7 @@ PE_top = constants.m*g*(2*radius);
 min_E = min_KE_l_top + PE_top;
 min_speed_bottom = sqrt(2*min_E/(constants.m));
 
-k = 5;
+k = 1;
 s0 = k * min_speed_bottom + 2;
 % the energy is then
 E = 0.5*constants.m*s0^2;
@@ -33,7 +33,7 @@ xr = radius*sin(theta);
 zr = radius*(1-cos(theta));
 f_centp = constants.m * radius * omega.^2;
 
-thrust_world = [-f_centp.*sin(theta); f_centp.*cos(theta)];
+thrust_world = [-f_centp.*sin(theta); -g+f_centp.*cos(theta)];
 
 pitch = unwrap(atan2(-thrust_world(1,:),thrust_world(2,:)));
 pitch_rate = diff(pitch)./diff(t);

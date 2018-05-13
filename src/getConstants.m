@@ -7,5 +7,6 @@ constants.tmax = 3*constants.g;
 constants.dt = 0.01;
 % Define the width of the quadrotor (distance between motors)
 constants.baseline = 0.1;
+constants.radius = 1;
 end
 

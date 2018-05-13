@@ -12,7 +12,7 @@ tau_body = (u(1) - u(2))*constants.baseline/2;
 thrust = sum(u);
 
 % Calculate x_dot
-w_dot = inv(constants.J) * tau_body;
+w_dot = tau_body / constants.J;
 vz_dot = constants.g + thrust * cos(x(3));
 vx_dot = thrust * sin(x(3));
 
