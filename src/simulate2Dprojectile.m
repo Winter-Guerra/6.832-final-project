@@ -10,27 +10,9 @@ addpath('plotting');
 radius   = 1.0;
 velocity = 1;
 sim_dt   = 0.1;
-<<<<<<< HEAD
-constants.m  = 1;
-% constants.dt = sim_dt;
-g = 9.8;
-%g=0.1;
-J = 5e-2;
-simulationTime = 200 / sim_dt;
-
-% Set all constants
-constants.g  = -g;
-constants.J  = J;
-constants.tmax = 3*g;
-constants.dt = 0.01;
-constants.radius = radius;
-% Define the width of the quadrotor (distance between motors)
-constants.baseline = 0.1;
-=======
 simulationTime = 200 / sim_dt;
 
 [constants] = getConstants();
->>>>>>> 0fd0b005e9257e3ebaee04ab6c9d5fffaf841da9
 
 T = [0];
 
@@ -44,12 +26,12 @@ vz    = v0 * sin(theta);
 %% Simulate the loop
 x_vec = [];
 u_vec = [];
-x = [0 -1 0 0 0 0];
-t = 0:0.01:0.5;
+x = [0 0 0 0 0 0];
+t = 0:0.01:3.75;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 
-x = [0 0 0 0 0 0];
+x = [0 10 -pi 0 0 .1];
 %[u,t, x] = controllerEnergy(x, [], constants);
 pitch_vec = [x(3)];
 states = [];
@@ -65,12 +47,12 @@ for i = 2:length(t)
     %x = quadrotorDynamics2d(x, uin, constants);
 
     u = [10.0 5]; % F_1, F_2
-    p_f = [0,0];
+    p_f = [0,0, 0];
     
     % Position controller for a specific point.
     u = lqrPositionController(p_f, x, constants);
     
-    u_vec = [u_vec; u'];
+    u_vec = [u_vec; u];
     
     % Assure that actuation limits are followed
     u = max(u, 0);

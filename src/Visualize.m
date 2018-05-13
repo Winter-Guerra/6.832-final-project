@@ -19,7 +19,7 @@ h  = draw_drone([], 'b',1,0);
 ht = hgtransform('Parent', gca); 
 set(h, 'Parent', ht);
 
-while(true)
+%while(true)
     for i = 1:num_t
         hold off;
         transformMatrix = eye(4);
@@ -28,5 +28,5 @@ while(true)
         set (ht, 'Matrix', transformMatrix);
         pause(.1);
     end
-end    
+%end    
 end

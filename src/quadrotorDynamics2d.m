@@ -9,12 +9,13 @@ function [x, x_dot] = quadrotorDynamics2d (x, u, constants)
 tau_body = (u(1) - u(2))*constants.baseline/2;
 
 % Calculate total thrust
-thrust = sum(u);
+thrust = sum(u) / constants.m;
 
 % Calculate x_dot
 w_dot = tau_body / constants.J;
 vz_dot = constants.g + thrust * cos(x(3));
 vx_dot = thrust * sin(x(3));
+
 
 x_dot = [x(4), x(5), x(6), vx_dot, vz_dot, w_dot];
 
