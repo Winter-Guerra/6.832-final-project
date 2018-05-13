@@ -10,18 +10,9 @@ addpath('plotting');
 radius   = 1.0;
 velocity = 1;
 sim_dt   = 0.1;
-constants.m  = 1;
-% constants.dt = sim_dt;
-g = 9.8;
-%g=0.1;
-J = 5e-2;
-constants.g  = -g;
-constants.J  = J;
 simulationTime = 200 / sim_dt;
-constants.tmax = 3*g;
-constants.dt = 0.01;
-% Define the width of the quadrotor (distance between motors)
-constants.baseline = 0.1;
+
+[constants] = getConstants();
 
 T = [0];
 
@@ -44,8 +35,11 @@ for i = 2:length(t)
     % Calculate input from controller
     u = [50.0 0]; % F_1, F_2
     
+    % Assure that actuation limits are followed
+    u = max(u, 0);
+    
     % Simulate next step in dynamics
-    x = quadrotorDynamics2d(x, u, constants);
+    [x,x_dot] = quadrotorDynamics2d(x, u, constants);
     
     % Populate vector of states for later visualization
     x_vec = [x_vec; x];    
