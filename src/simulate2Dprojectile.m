@@ -31,17 +31,22 @@ t = 0:0.01:3.75;
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 
+% calculate nominal trajectory
+[trajectory_nominal, u_f_matrix] = generate2DTrajectory(2*pi/360, constants); % Use a dtheta of 1deg.
+
 x = [0  0 0 .5 0 .2 ];
 %[u,t, x] = controllerEnergy(x, [], constants);
 pitch_vec = [x(3)];
 states = [];
 
 x_f = [1 1 0 0 0 0];
+% Nominal thrust should counteract gravity
+u_f = [-constants.m*constants.g/2, -constants.m*constants.g/2];
 
 % Position controller for a specific point.
 % Replace this with a vector of K matrices for 
 % applying TVLQR.
-[K, u_f] = lqrPositionController(x_f, constants);
+K = lqrPositionController(x_f, u_f, constants);
 
 
 for i = 2:length(t)    

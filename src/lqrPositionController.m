@@ -1,9 +1,6 @@
-function [K, u_f] = lqrPositionController(x_f, constants)
+function [K, u_f] = lqrPositionController(x_f, u_f, constants)
 %LQRPOSITIONCONTROLLER controller for hovering around a fixed point p_f.
 % Assumes level hover.
-
-% Nominal thrust should counteract gravity
-u_f = [-constants.m*constants.g/2, -constants.m*constants.g/2];
 
 %u_f = [0 0];
 
