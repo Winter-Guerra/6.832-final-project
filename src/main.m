@@ -9,19 +9,9 @@ addpath('plotting');
 radius   = 1.0;
 velocity = 1;
 sim_dt   = 0.1;
-
-constants.m  = 1;
-% constants.dt = sim_dt;
-
-g = 9.8;
-%g=0.1;
-J = 5e-2;
-
-constants.g  = [0; 0; -g];
-constants.J  = J * eye(3);
 simulationTime = 200 / sim_dt;
 
-constants.tmax = 3*g;
+[constants] = getConstants();
 
 % Initialize the state
 state.position = [0; 0; 0];

@@ -1,31 +1,32 @@
-function [x] = quadrotorDynamics2d (x, u, constants)
+function [x, x_dot] = quadrotorDynamics2d (x, u, constants)
 
 % State is defined as [x z theta vx vz w]
 % Input is defined as [F_1 F_2], where F_i is the thrust from a specific
-% motor. F_i >= 0 should be ensured in this function. 
+% motor. F_i >= 0 should be ensured OUTSIDE of this function. 
 
-% Make sure that thrust and torque are dynamically feasible.
-u_clipped = max(u, 0);
 
 % calculate body torque
-tau_body = (u_clipped(1) - u_clipped(2))*constants.baseline/2;
+tau_body = (u(1) - u(2))*constants.baseline/2;
 
 % Calculate total thrust
-thrust = sum(u_clipped)
+thrust = sum(u);
 
-%Update the state
+% Calculate x_dot
 w_dot = inv(constants.J) * tau_body;
-x(6) = x(6) + w_dot * constants.dt;
-
-x(3) = x(3) + x(6) * constants.dt;
-
 vz_dot = constants.g + thrust * cos(x(3));
 vx_dot = thrust * sin(x(3));
 
-x(4) = x(4) + vx_dot * constants.dt;
-x(5) = x(5) + vz_dot * constants.dt;
+x_dot = [x(4), x(5), x(6), vx_dot, vz_dot, w_dot];
 
-x(1) = x(1) + x(4) * constants.dt;
-x(2) = x(2) + x(5) * constants.dt;
+% Propagate state using dt*x_dot
+x = x + x_dot*constants.dt;
+
+% x(6) = x(6) + w_dot * constants.dt;
+% x(3) = x(3) + x(6) * constants.dt;
+% x(4) = x(4) + vx_dot * constants.dt;
+% x(5) = x(5) + vz_dot * constants.dt; 
+% x(1) = x(1) + x(4) * constants.dt;
+% x(2) = x(2) + x(5) * constants.dt;
+
 
 end
