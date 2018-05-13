@@ -8,7 +8,7 @@ function [K, u_f] = lqrPositionController(x_f, u_f, constants)
 [A,B] = getLinearizedDynamics(x_f, u_f, constants);
 
 % Pick a reasonable positive semi-definite state cost matrix Q
-Q = diag([10,10,5,1,1,1]);
+Q = diag([1,1,3,5,5,2]);
 
 % Pick a reasonable positive semi-definite input cost matrix R
 R = eye(2);

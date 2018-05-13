@@ -16,8 +16,8 @@ parfor i = 1:n
     u_f = u_f_matrix(i,:);
     
     % Compute and save K.
-    disp(x_f);
-    disp(u_f);
+%     disp(x_f);
+%     disp(u_f);
     K = lqrPositionController(x_f, u_f, constants);
     K_matrix(:,:,i) = K;
 end
