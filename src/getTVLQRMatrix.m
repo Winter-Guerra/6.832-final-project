@@ -8,17 +8,18 @@ function [K_matrix] = getTVLQRMatrix(trajectory, u_f_matrix, constants)
 len_u = 2;
 
 K_matrix = zeros(len_u, len_x, n);
-u_f_matrix = zeros(n, len_u);
 
 % Iterate through each fixed point and run LQR.
-for i = 1:n
+parfor i = 1:n
     % Get u_f and x_f from inputs.
     x_f = trajectory(i,:);
     u_f = u_f_matrix(i,:);
     
     % Compute and save K.
+    disp(x_f);
+    disp(u_f);
     K = lqrPositionController(x_f, u_f, constants);
-    K(:,:,i) = K;
+    K_matrix(:,:,i) = K;
 end
 
 

@@ -1,4 +1,4 @@
-function [trajectory] = generate2DTrajectory(d_theta, constants)
+function [trajectory, u_f_matrix] = generate2DTrajectory(d_theta, constants)
 % generate2DTrajectory Generates a (len(x), n) matrix. n is the number of
 % samples of the trajectory. Does not generate the "ramp up" leg portion of
 % the trajectory. That is assumed to be handled by a simple speed
@@ -27,14 +27,17 @@ d_theta = -velocity_tan/(2*pi*constants.radius);
 % Populate positions in trajectory
 trajectory = [x_vec', z_vec', theta'-pi/2, x_dot_vec', z_dot_vec', d_theta'];
 
+% @TODO: Populate u_f vectors into matrix.
+u_f_matrix = ones(length(theta), 2) .* [-constants.m*constants.g/2, -constants.m*constants.g/2];
+
 % Do some analysis
 % g_max = (v_nominal^2/r)/9.81 + 1;
 % 
 % disp(["Trajectory takes ", t, " seconds. Max acceleration ", g_max, "g"]);
 
-figure(2);
-
-Visualize(trajectory,2);
+% DEBUG
+%figure(2);
+%Visualize(trajectory,2);
 
 end
 
