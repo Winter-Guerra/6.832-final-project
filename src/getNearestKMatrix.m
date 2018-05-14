@@ -6,6 +6,9 @@ function [K, u_f, x_f] = getNearestKMatrix(x, x_f_matrix, K_matrix, u_f_matrix)
 % Calculate x_bar
 x_bar_matrix = x - x_f_matrix;
 
+% Only compare x&y (no qd).
+x_bar_matrix = x_bar_matrix(:,1:2);
+
 % calculate norms
 x_bar_norms = vecnorm(x_bar_matrix'); % size (1,num_fixed,points)
 

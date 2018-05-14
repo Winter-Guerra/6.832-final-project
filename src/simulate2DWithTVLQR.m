@@ -50,11 +50,15 @@ x = [0  0 0 7*sqrt(constants.radius) 0 0 ];
 % K = lqrPositionController(x_f, u_f, constants);
 
 
-for i = 2:length(t)    
-    % TVLQR Controller
-    [K, u_f, x_f] = getNearestKMatrix(x, trajectory_nominal, K_matrix, u_f_matrix);
+for i = 2:length(t)
+    % Wrap theta to [-2pi, 0] for LQR.
+    x_wrapped = [x(1:2) -wrapTo2Pi(-x(3)) x(4:6)];
     
-    x_bar = x - x_f;
+    % TVLQR Controller
+    [K, u_f, x_f] = getNearestKMatrix(x_wrapped, trajectory_nominal, K_matrix, u_f_matrix);
+    
+    
+    x_bar = x_wrapped - x_f;
     u = -K*x_bar' + u_f';
     
     u_vec = [u_vec; u];
