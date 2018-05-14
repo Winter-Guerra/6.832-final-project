@@ -61,7 +61,7 @@ for i = 2:length(t)
     x_bar = x_wrapped - x_f;
     u = -K*x_bar' + u_f';
     
-    u_vec = [u_vec; u];
+    u_vec = [u_vec; u'];
     
     % Assure that actuation limits are followed
     u = max(u, 0);
@@ -76,12 +76,14 @@ for i = 2:length(t)
 end
 
 figure(1); 
-plot(u_vec(1,:), u_vec(2,:));
+plot(u_vec(:,1), u_vec(:,2));
 %plot(t(1,:), t(2,:), 'r');
 %hold on; plot(traj(:,1), traj(:,3),'gx');
 %hold on; quiver(traj(1:5:end,1), traj(1:5:end,3), 0.01 * cos(pitch(1:5:end)), 0.01 * sin(pitch(1:5:end)) ); 
 
-figure(2);
+%plot(u_vec(2,:))
 
+figure(2);
 % Visualize(trajectory_nominal,1);
 Visualize(x_vec, 2);
+
