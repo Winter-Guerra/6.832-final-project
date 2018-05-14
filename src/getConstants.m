@@ -9,5 +9,8 @@ constants.radius = 1;
 % Define the width of the quadrotor (distance between motors)
 constants.baseline = 0.1;
 constants.radius = 1;
+
+%Simulation time in seconds
+constants.simTime = 2;
 end
 
