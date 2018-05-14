@@ -1,4 +1,4 @@
-function [trajectory, u_f_matrix, t] = generate2DTrajectory(d_theta, constants)
+function [trajectory, u_f_matrix, t, s0] = generate2DTrajectory(d_theta, constants)
 % generate2DTrajectory Generates a (len(q), n) matrix. n is the number of
 % samples of the trajectory. Does not generate the "ramp up" leg portion of
 % the trajectory. That is assumed to be handled by a simple speed

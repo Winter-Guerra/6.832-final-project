@@ -24,21 +24,38 @@ vx    = v0 * cos(theta);
 vz    = v0 * sin(theta);
 
 %% Simulate the loop
-t = 0:0.01:3.75;
+t = 0:0.01:0.25;
 x_vec = [];
 u_vec = [];
-x = [0 0 0 0 0 0];
+x = [-1 -1 0 0 0 0];
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 
+
 % calculate nominal trajectory
-[trajectory_nominal, u_f_matrix, t] = generate2DTrajectory(0.01, constants);
+[trajectory_nominal, u_f_matrix, t, s0] = generate2DTrajectory(0.01, constants);
+
+% Define start and endpoints
+start_p = [-0.25 0 0];
+end_p = [0.25 0 -2*pi];
+
+start_x = [start_p s0 0 0];
+end_x = [end_p 0 0 0];
+
+
+% Prepend acceleration point and append stopping point
+trajectory_nominal = [  [start_p 0 0 0]; 
+                        trajectory_nominal; 
+                        [end_p 0 0 0]];
+u_f_matrix = [[-constants.g*constants.m/2 -constants.g*constants.m/2];
+                u_f_matrix;
+                [-constants.g*constants.m/2 -constants.g*constants.m/2]];
 
 % Get TVLQR controller for nominal trajectory
 [K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
 
 % starting position.
-x = [0  0 0 7*sqrt(constants.radius) 0 0 ];
+x = [0  0 0 s0 0 0 ];
 
 % Hover controller.
 % x_f = [1 1 0 0 0 0];
@@ -49,13 +66,24 @@ x = [0  0 0 7*sqrt(constants.radius) 0 0 ];
 % applying TVLQR.
 % K = lqrPositionController(x_f, u_f, constants);
 
+k_idx = 1;
 
 for i = 2:length(t)
-    % Wrap theta to [-2pi, 0] for LQR.
-    x_wrapped = [x(1:2) -wrapTo2Pi(-x(3)) x(4:6)];
+    % Wrap theta to [-2pi, 0] for continuous looping LQR.
+    % Note, does some really bad things with start/stop trajectories
+    %x_wrapped = [x(1:2) -wrapTo2Pi(-x(3)) x(4:6)];
+    x_wrapped = x;
     
     % TVLQR Controller
-    [K, u_f, x_f] = getNearestKMatrix(x_wrapped, trajectory_nominal, K_matrix, u_f_matrix);
+    [K, u_f, x_f, k_idx] = getNearestKMatrix(x_wrapped, trajectory_nominal, K_matrix, u_f_matrix, k_idx);
+    
+    % If start or stop of trajectory, use the right x_f.
+    [r,c] = size(trajectory_nominal);
+    if (k_idx == 1)
+        x_f = [start_p s0 0 0];
+    elseif (k_idx == r)
+        x_f = end_x;
+    end
     
     
     x_bar = x_wrapped - x_f;
