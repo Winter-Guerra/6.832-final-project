@@ -9,7 +9,7 @@ x_bar_matrix = x - x_f_matrix;
 % Only compare q (no qd).
 %x_bar_matrix = x_bar_matrix(:, 1:2);
 
-x_bar_matrix = x_bar_matrix(last_k_idx:end, 1:2);
+x_bar_matrix = x_bar_matrix(last_k_idx:end, 1:3);
 
 % calculate norms
 x_bar_norms = vecnorm(x_bar_matrix'); % size (1,num_fixed,points)

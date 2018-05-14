@@ -55,7 +55,7 @@ u_f_matrix = [[-constants.g*constants.m/2 -constants.g*constants.m/2];
 [K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
 
 % starting position.
-x = [0  0 0 s0 0 0 ];
+x = [-.5  0 0 0 0 0 ];
 
 % Hover controller.
 % x_f = [1 1 0 0 0 0];
