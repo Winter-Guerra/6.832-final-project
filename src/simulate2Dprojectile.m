@@ -41,21 +41,26 @@ x_f = [1 1 0 0 0 0];
 % Position controller for a specific point.
 % Replace this with a vector of K matrices for 
 % applying TVLQR.
-[K, u_f] = lqrPositionController(x_f, constants);
+%[K, u_f] = lqrPositionController(x_f, constants);
 
+[t,trajectory] = generate2DTrajectory(0.01, constants);
+x = trajectory(1,:);
 
-for i = 2:length(t)    
+for i = 2:40 %length(trajectory)    
     % Calculate input from controller
     %u = [50.0 0]; % F_1, F_2
     %constants.dt = t(i) - t(i-1);
     %uin = u(i,:);
     
+    constants.dt = t(i) - t(i-1);
+    xd = trajectory(i,:);
+    u  = controlEnergy(x, xd, constants);
+     
     % Simulate next step in dynamics
     %x = quadrotorDynamics2d(x, uin, constants);
-    x_bar = x - x_f;
+    %x_bar = x - x_f;
     
-    u = -K*x_bar' + u_f';
-
+    %u = -K*x_bar' + u_f';
     
     u_vec = [u_vec; u];
     

@@ -45,8 +45,10 @@ pitch = unwrap(atan2(-thrust_world(1,:),thrust_world(2,:)));
 pitch_rate = diff(pitch)./diff(t);
 alpha = diff(pitch_rate)./diff(t(1:end-1));
 
-pitch_rate = [0, pitch_rate];
-trajectory = [xr' zr' -pitch' (speed.*sin(theta))' (speed.*cos(theta))' pitch_rate'];
+%Start pitch forward
+%pitch(1) = 0.1;
+pitch_rate = [pitch_rate(1), pitch_rate];
+trajectory = [xr' zr' -pitch' (speed.*cos(theta))' (speed.*sin(theta))' -pitch_rate'];
 
 % % Min speed to get around loop
 % v_start = 7*sqrt(constants.radius);
@@ -76,9 +78,9 @@ trajectory = [xr' zr' -pitch' (speed.*sin(theta))' (speed.*cos(theta))' pitch_ra
 % 
 % disp(["Trajectory takes ", t, " seconds. Max acceleration ", g_max, "g"]);
 
-figure(2);
+%figure(2);
 
-Visualize(trajectory,2);
+%Visualize(trajectory,2);
 
 end
 
