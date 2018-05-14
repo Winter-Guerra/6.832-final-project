@@ -79,5 +79,5 @@ plot(u_vec(1,:), u_vec(2,:));
 
 figure(2);
 
-Visualize(trajectory_nominal,1);
+% Visualize(trajectory_nominal,1);
 Visualize(x_vec, 2);

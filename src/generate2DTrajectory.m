@@ -18,7 +18,7 @@ s0 = min_speed_bottom;
 E = 0.5*constants.m*s0^2;
 
 z_raw = constants.radius*(1-cos(linspace(0,pi,pi/d_theta)));
-speed_raw = sqrt(2*(E-constants.m*constants.g*z_raw)/constants.m);
+speed_raw = sqrt(2*(E + constants.m*constants.g*z_raw)/constants.m);
 omega_raw = speed_raw/constants.radius;
 
 theta_raw = acos((constants.radius-z_raw)/constants.radius);
@@ -52,8 +52,14 @@ alpha = diff(pitch_rate)./diff(t(1:end-1));
 pitch_rate = [pitch_rate(1), pitch_rate];
 trajectory = [xr' zr' -pitch' (speed.*cos(theta))' (speed.*sin(theta))' -pitch_rate'];
 
+% Calculate nominal body frame thrust from thrust_world.
+% Assuming ideal starting conditions, the thrust from both props should be
+% equal.
+total_thrust_body_on_normal = vecnorm(thrust_world);
+
+% Calculate nominal thrust per motor by splitting the total thrust.
 % Transpose nominal thrust to match trajectory shape
-u_f_matrix = thrust_world';
+u_f_matrix = [total_thrust_body_on_normal' total_thrust_body_on_normal']/2;
 
 % % Min speed to get around loop
 % v_start = 7*sqrt(constants.radius);
