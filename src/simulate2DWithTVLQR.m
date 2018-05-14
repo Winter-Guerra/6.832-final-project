@@ -36,7 +36,7 @@ pitch  = zeros(length(t), 1);
 [trajectory_nominal, u_f_matrix, t, s0] = generate2DTrajectory(0.01, constants);
 
 % Define start and endpoints
-start_p = [-0.25 0 0];
+start_p = [-0.05 0 0];
 end_p = [0.25 0 -2*pi];
 
 start_x = [start_p s0 0 0];
@@ -44,9 +44,9 @@ end_x = [end_p 0 0 0];
 
 
 % Prepend acceleration point and append stopping point
-trajectory_nominal = [  [start_p 0 0 0]; 
+trajectory_nominal = [  start_x; 
                         trajectory_nominal; 
-                        [end_p 0 0 0]];
+                        end_x];
 u_f_matrix = [[-constants.g*constants.m/2 -constants.g*constants.m/2];
                 u_f_matrix;
                 [-constants.g*constants.m/2 -constants.g*constants.m/2]];
@@ -55,7 +55,7 @@ u_f_matrix = [[-constants.g*constants.m/2 -constants.g*constants.m/2];
 [K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
 
 % starting position.
-x = [-.5  0 0 0 0 0 ];
+x = [-1  0 0 0 0 0 ];
 
 % Hover controller.
 % x_f = [1 1 0 0 0 0];
@@ -78,12 +78,12 @@ for i = 2:length(t)
     [K, u_f, x_f, k_idx] = getNearestKMatrix(x_wrapped, trajectory_nominal, K_matrix, u_f_matrix, k_idx);
     
     % If start or stop of trajectory, use the right x_f.
-    [r,c] = size(trajectory_nominal);
-    if (k_idx == 1)
-        x_f = [start_p s0 0 0];
-    elseif (k_idx == r)
-        x_f = end_x;
-    end
+%     [r,c] = size(trajectory_nominal);
+%     if (k_idx == 1)
+%         x_f = [start_p s0 0 0];
+%     elseif (k_idx == r)
+%         x_f = end_x;
+%     end
     
     
     x_bar = x_wrapped - x_f;
