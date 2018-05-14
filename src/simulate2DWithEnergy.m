@@ -31,50 +31,21 @@ x = [0 0 0 0 0 0];
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 
-% calculate nominal trajectory
-[trajectory_nominal, u_f_matrix] = generate2DTrajectory(2*pi/360, constants); % Use a dtheta of 1deg.
-
-% Get TVLQR controller for nominal trajectory
-[K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
-
 % starting position.
 x = [0  0 0 .5 0 .2 ];
 
-%[u,t, x] = controllerEnergy(x, [], constants);
 pitch_vec = [x(3)];
 states = [];
 
-% Hover controller.
-% x_f = [1 1 0 0 0 0];
-% Nominal thrust should counteract gravity
-% u_f = [-constants.m*constants.g/2, -constants.m*constants.g/2];
-% Position controller for a specific point.
-% Replace this with a vector of K matrices for 
-% applying TVLQR.
 
-% K = lqrPositionController(x_f, u_f, constants);
-
-[t,trajectory] = generate2DTrajectory(0.01, constants);
+[trajectory, u_f_matrix, t] = generate2DTrajectory(0.01, constants);
 x = trajectory(1,:);
 
 for i = 2:length(t)    
-    % TVLQR Controller
-    %[K, u_f, x_f] = getNearestKMatrix(x, trajectory_nominal, K_matrix, u_f_matrix);
-    
-    % Calculate input from controller
-    %u = [50.0 0]; % F_1, F_2
-    %constants.dt = t(i) - t(i-1);
-    %uin = u(i,:);
     
     constants.dt = t(i) - t(i-1);
     xd = trajectory(i,:);
     u  = controlEnergy(x, xd, constants);
-     
-    % Simulate next step in dynamics
-    %x = quadrotorDynamics2d(x, uin, constants);
-    %x_bar = x - x_f;
-    
-    %u = -K*x_bar' + u_f';
     
     u_vec = [u_vec; u];
     

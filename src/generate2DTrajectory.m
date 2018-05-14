@@ -1,8 +1,10 @@
-function [t, trajectory] = generate2DTrajectory(d_theta, constants)
+function [trajectory, u_f_matrix, t] = generate2DTrajectory(d_theta, constants)
 % generate2DTrajectory Generates a (len(q), n) matrix. n is the number of
 % samples of the trajectory. Does not generate the "ramp up" leg portion of
 % the trajectory. That is assumed to be handled by a simple speed
 % controller. len(q) is assumed to be 6.
+% Also returns the expected nominal thrust at every point in trajectory. 
+% u_f_matrix (num_fixed_points, len(u))
 
 min_speed_top = sqrt(-constants.g * constants.radius);
 min_omega_top = min_speed_top/constants.radius;
@@ -49,6 +51,9 @@ alpha = diff(pitch_rate)./diff(t(1:end-1));
 %pitch(1) = 0.1;
 pitch_rate = [pitch_rate(1), pitch_rate];
 trajectory = [xr' zr' -pitch' (speed.*cos(theta))' (speed.*sin(theta))' -pitch_rate'];
+
+% Transpose nominal thrust to match trajectory shape
+u_f_matrix = thrust_world';
 
 % % Min speed to get around loop
 % v_start = 7*sqrt(constants.radius);
