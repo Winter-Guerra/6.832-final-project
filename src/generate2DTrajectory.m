@@ -73,13 +73,16 @@ trajectory = [xr' zr' -pitch' (speed.*cos(theta))' (speed.*sin(theta))' -pitch_r
 % % Populate positions in trajectory
 % trajectory = [x_vec', z_vec', theta', x_dot_vec', z_dot_vec', d_theta'];
 
+% @TODO: Populate u_f vectors into matrix.
+%u_f_matrix = ones(length(theta), 2) .* [-constants.m*constants.g/2, -constants.m*constants.g/2];
+
 % Do some analysis
-% g_max = (v_nominal^2/r)/9.81 + 1;
+% g_max = (v_nominal^2/r)>>>>>>> 772f27931bd4519ee3bb63b737d111b8071e807e/9.81 + 1;
 % 
 % disp(["Trajectory takes ", t, " seconds. Max acceleration ", g_max, "g"]);
 
+% DEBUG
 %figure(2);
-
 %Visualize(trajectory,2);
 
 end

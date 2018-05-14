@@ -1,9 +1,6 @@
-function [K, u_f] = lqrPositionController(x_f, constants)
+function [K, u_f] = lqrPositionController(x_f, u_f, constants)
 %LQRPOSITIONCONTROLLER controller for hovering around a fixed point p_f.
 % Assumes level hover.
-
-% Nominal thrust should counteract gravity
-u_f = [-constants.m*constants.g/2, -constants.m*constants.g/2];
 
 %u_f = [0 0];
 
@@ -11,7 +8,7 @@ u_f = [-constants.m*constants.g/2, -constants.m*constants.g/2];
 [A,B] = getLinearizedDynamics(x_f, u_f, constants);
 
 % Pick a reasonable positive semi-definite state cost matrix Q
-Q = diag([10,10,5,1,1,1]);
+Q = diag([1,1,3,5,5,2]);
 
 % Pick a reasonable positive semi-definite input cost matrix R
 R = eye(2);

@@ -12,5 +12,7 @@ constants.radius = 1;
 
 %Simulation time in seconds
 constants.simTime = 2;
+% Publish jacobians for system
+[constants.df_dx, constants.df_du, constants.x_sym, constants.u_sym] = getSystemJacobians(constants);
 end
 
