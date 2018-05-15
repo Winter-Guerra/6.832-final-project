@@ -146,5 +146,5 @@ plot(k_idx_vector, 'x');
 
 figure(3);
 % Visualize(trajectory_nominal,1);
-Visualize(x_vec, 3);
+Visualize(x_vec, 3, 0);
 
