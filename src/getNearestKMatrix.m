@@ -9,13 +9,18 @@ x_bar_matrix = x - x_f_matrix;
 % Only compare q (no qd).
 %x_bar_matrix = x_bar_matrix(:, 1:2);
 
-x_bar_matrix = x_bar_matrix(last_k_idx:end, 1:3);
+x_bar_matrix = x_bar_matrix(last_k_idx:end, 1:2);
 
 % calculate norms
 x_bar_norms = vecnorm(x_bar_matrix'); % size (1,num_fixed,points)
 
 % Find argmin
 [y,i] = min(x_bar_norms);
+
+% If the jump is extremely large, this is probably a bad fit.
+if (i > 100)
+i=2;
+end
 
 k_idx = i + last_k_idx - 1;
 %k_idx = i ;

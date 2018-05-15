@@ -37,20 +37,13 @@ constants.dt = t(2) - t(1);
 
 % Define start and endpoints
 start_p = [-0.05 0 0];
-<<<<<<< HEAD
 end_p = [0.2 -0.4 -2*pi];
-=======
-end_p = [0.25 0 -2*pi];
->>>>>>> a75b91a88697962f913c84e8ae1582829d69f85b
 
 start_x = [start_p s0 0 0];
 end_x = [end_p 0 0 0];
 
 % Ramp into the trajectory
-x_in  = -constants.radius:0.01:-0.25;
-x_out = 0.25:0.01:constants.radius;
-
-vel_in_x = trajectory_nominal(1,4);
+vel_in_x = trajectory_nominal(1,4) +2;
 vel_in_y = trajectory_nominal(1,5);
 pitch_rate_in = trajectory_nominal(1,6);
 
@@ -62,25 +55,25 @@ x_ramp = start_p(1) - flip(x_ramp);
 z_ramp = zeros(size(x_ramp));
 pitch_rate_ramp = linspace(0, pitch_rate_in, length(t_ramp));
 zeros_ramp = zeros(size(x_ramp));
-pitch_ramp = -0.1.* ones(size(x_ramp));
+pitch_ramp = 0.1.* ones(size(x_ramp));
 
 ramp_in = [x_ramp' z_ramp' pitch_ramp' vel_x_ramp' zeros_ramp' zeros_ramp'];
 
-%ramp_out = [-flip(x_ramp)' 0.5-z_ramp' pitch_ramp' flip(vel_x_ramp)' zeros_ramp' zeros_ramp'];
+ramp_out = [-flip(x_ramp)' z_ramp' -pitch_ramp'-2*pi flip(vel_x_ramp)' zeros_ramp' zeros_ramp'];
 
 % Prepend acceleration point and append stopping point
 trajectory_nominal = [  ramp_in;
                         %[start_p s0 0 0]; 
                         trajectory_nominal; 
-                        [end_p s0 0 0]];
-                        %ramp_out];
+                        %[end_p s0 0 0];
+                        ramp_out];
                     
 u_f_ramp = repmat([-constants.g*constants.m/2 -constants.g*constants.m/2]', 1, length(t_ramp));                    
 u_f_matrix = [  u_f_ramp';
                 %[-constants.g*constants.m/2 -constants.g*constants.m/2];
                 u_f_matrix;
-                [-constants.g*constants.m/2 -constants.g*constants.m/2]];
-                %u_f_ramp'];
+                %[-constants.g*constants.m/2 -constants.g*constants.m/2]];
+                u_f_ramp'];
 
 % Get TVLQR controller for nominal trajectory
 [K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
@@ -99,6 +92,8 @@ x = trajectory_nominal(1,:);
 % applying TVLQR.
 % K = lqrPositionController(x_f, u_f, constants);
 
+k_idx_vector = [];
+
 k_idx = 1;
 
 for i = 2:20*length(t)
@@ -115,6 +110,7 @@ for i = 2:20*length(t)
     u = -K*x_bar' + u_f';
     
     u_vec = [u_vec; u'];
+    k_idx_vector = [k_idx_vector k_idx];
     
     % Assure that actuation limits are followed
     u = max(u, 0);
@@ -143,6 +139,9 @@ figure(1);
 plot(positionErrorTimeline);
 
 figure(2);
+plot(k_idx_vector, 'x');
+
+figure(3);
 % Visualize(trajectory_nominal,1);
-Visualize(x_vec, 2);
+Visualize(x_vec, 3);
 
