@@ -37,7 +37,11 @@ constants.dt = t(2) - t(1);
 
 % Define start and endpoints
 start_p = [-0.05 0 0];
+<<<<<<< HEAD
 end_p = [0.2 -0.4 -2*pi];
+=======
+end_p = [0.25 0 -2*pi];
+>>>>>>> a75b91a88697962f913c84e8ae1582829d69f85b
 
 start_x = [start_p s0 0 0];
 end_x = [end_p 0 0 0];
@@ -85,6 +89,7 @@ u_f_matrix = [  u_f_ramp';
 %x = [0  0 0 s0 0 0 ];
 x = trajectory_nominal(1,:);
 
+
 % Hover controller.
 % x_f = [1 1 0 0 0 0];
 % Nominal thrust should counteract gravity
@@ -106,12 +111,12 @@ for i = 2:20*length(t)
     [K, u_f, x_f, k_idx] = getNearestKMatrix(x_wrapped, trajectory_nominal, K_matrix, u_f_matrix, k_idx);
     
     % If start or stop of trajectory, use the right x_f.
-    [r,c] = size(trajectory_nominal);
-    if (k_idx == 1)
-        x_f = [start_p s0 0 0];
-    elseif (k_idx == r)
-        x_f = end_x;
-    end
+%     [r,c] = size(trajectory_nominal);
+%     if (k_idx == 1)
+%         x_f = [start_p s0 0 0];
+%     elseif (k_idx == r)
+%         x_f = end_x;
+%     end
     
     
     x_bar = x_wrapped - x_f;
