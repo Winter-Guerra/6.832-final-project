@@ -1,4 +1,4 @@
-function [RMSE, finalError, positionErrorTimeline] = analyzeTrajectory(simulatedTrajectory, nominalTrajectory, constants)
+function [MAE, finalError, positionErrorTimeline] = analyzeTrajectory(simulatedTrajectory, nominalTrajectory, constants)
 %analyzeTrajectory 
 % Takes in a simulated __loop__ (n, len(x)) and
 % Returns RMSE (scalar) and positionErrorTimeline (1,t)
@@ -16,13 +16,15 @@ positions = simulatedTrajectory(leftBoundIDX:rightBoundIDX,1:2);
 C = [0 constants.radius];
 
 % Positions as vectors from center of circle
-vectors = (positions - C);
+vectors = ( positions - C);
 
 % Project positions onto circle
-positionsOnCircle = C + vectors / vecnorm(vectors) * constants.radius;
+positionsOnCircle = C + vectors ./ vecnorm(vectors')' * constants.radius;
 
 % Find error between positions and closest point on circle.
 positionalError = positions - positionsOnCircle;
+
+[r,c] = size(positionalError);
 
 
 % positional error
@@ -31,7 +33,7 @@ positionalError = positions - positionsOnCircle;
 %positionalError = trajectoryError(:,1:2);
 positionErrorTimeline = vecnorm(positionalError');
 
-RMSE = sqrt( sum(positionErrorTimeline.^2) / numel(positionErrorTimeline) );
+MAE = sum(positionErrorTimeline)/r ;
 
 finalError = vecnorm(simulatedTrajectory(end:end,1:2) - nominalTrajectory(end:end,1:2));
 

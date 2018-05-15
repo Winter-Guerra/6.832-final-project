@@ -117,9 +117,9 @@ for i = 2:20*length(t)
 end
 
 % Do some statistical analysis
-[RMSE, finalError, positionErrorTimeline] = analyzeTrajectory(x_vec, trajectory_masked, constants);
-disp('RMSE of trajectory is: ');
-disp(RMSE);
+[MAE, finalError, positionErrorTimeline] = analyzeTrajectory(x_vec, trajectory_masked, constants);
+disp('MAE of trajectory is: ');
+disp(MAE);
 disp('Final error in meters is: ');
 disp(finalError);
 
