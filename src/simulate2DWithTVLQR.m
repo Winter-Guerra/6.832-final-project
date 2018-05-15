@@ -56,14 +56,20 @@ u_f_matrix = [  u_f_ramp_in;
                 u_f_matrix;
                 %[-constants.g*constants.m/2 -constants.g*constants.m/2]];
                 u_f_ramp_out];
+            
+            
+ subsample = 1;           
+ mask = 1:subsample:length(trajectory_nominal);
+ 
+ trajectory_masked = trajectory_nominal(mask,:);
+ u_f_matrix_masked = u_f_matrix(mask,:);
 
 % Get TVLQR controller for nominal trajectory
-[K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
+[K_matrix] = getTVLQRMatrix(trajectory_masked, u_f_matrix_masked, constants);
 
 % starting position.
 %x = [0  0 0 s0 0 0 ];
 x = trajectory_nominal(1,:);
-
 
 % Hover controller.
 % x_f = [1 1 0 0 0 0];
@@ -85,7 +91,7 @@ for i = 2:20*length(t)
     x_wrapped = x;
     
     % TVLQR Controller
-    [K, u_f, x_f, k_idx] = getNearestKMatrix(x_wrapped, trajectory_nominal, K_matrix, u_f_matrix, k_idx);
+    [K, u_f, x_f, k_idx] = getNearestKMatrix(x_wrapped, trajectory_masked, K_matrix, u_f_matrix_masked, k_idx);
     
     
     x_bar = x_wrapped - x_f;
@@ -111,7 +117,7 @@ for i = 2:20*length(t)
 end
 
 % Do some statistical analysis
-[RMSE, finalError, positionErrorTimeline] = analyzeTrajectory(x_vec, trajectory_nominal, constants);
+[RMSE, finalError, positionErrorTimeline] = analyzeTrajectory(x_vec, trajectory_masked, constants);
 disp('RMSE of trajectory is: ');
 disp(RMSE);
 disp('Final error in meters is: ');
@@ -125,5 +131,5 @@ plot(k_idx_vector, 'x');
 
 figure(3);
 % Visualize(trajectory_nominal,1);
-Visualize(x_vec, 3);
+Visualize(x_vec, 3, 0);
 

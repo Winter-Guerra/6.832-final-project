@@ -1,4 +1,4 @@
-function Visualize(x_vec, fig)
+function Visualize(x_vec, fig, write_video)
 
 % X_vec is size (t, len(x)). E.g. one row for each t_i.
 [num_t, len_x] = size(x_vec); 
@@ -23,6 +23,11 @@ set(h, 'Parent', ht);
 ENU2NED = [0 1 0 0; 1 0 0 0; 0 0 -1 0; 0 0 0 1];
 %axis([-3 3 -3 3 -3 3])
 
+if (write_video)
+    vidWriter = VideoWriter('flips.avi', 'Uncompressed AVI');
+    open(vidWriter);
+end
+
 %while(true)
     for i = 1:num_t
         hold off;
@@ -39,6 +44,16 @@ ENU2NED = [0 1 0 0; 1 0 0 0; 0 0 -1 0; 0 0 0 1];
         zlabel('z')
         pause(.01);
         grid on;
+        axis([-5 4 -0.2 0.6 -0.8 2.0])
+        
+        if (write_video)
+            myFrame = getframe(gca);
+            writeVideo(vidWriter, myFrame);
+        end
     end
-%end    
+%end
+
+if (write_video)
+    close(vidWriter);
+end
 end
