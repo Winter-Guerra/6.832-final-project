@@ -13,9 +13,8 @@ acceleration = sum(u) / constants.m;
 
 % Calculate x_dot
 w_dot = tau_body / constants.J;
-vz_dot = constants.g + acceleration * cos(x(3))
-vx_dot = acceleration * sin(x(3))
-
+vz_dot = constants.g + acceleration * cos(x(3));
+vx_dot = acceleration * sin(x(3));
 
 x_dot = [x(4), x(5), x(6), vx_dot, vz_dot, w_dot];
 
