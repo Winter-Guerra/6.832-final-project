@@ -77,14 +77,6 @@ for i = 2:length(t)
     % TVLQR Controller
     [K, u_f, x_f, k_idx] = getNearestKMatrix(x_wrapped, trajectory_nominal, K_matrix, u_f_matrix, k_idx);
     
-    % If start or stop of trajectory, use the right x_f.
-%     [r,c] = size(trajectory_nominal);
-%     if (k_idx == 1)
-%         x_f = [start_p s0 0 0];
-%     elseif (k_idx == r)
-%         x_f = end_x;
-%     end
-    
     
     x_bar = x_wrapped - x_f;
     u = -K*x_bar' + u_f';
@@ -103,13 +95,15 @@ for i = 2:length(t)
     T = [T, T(end) + constants.dt];
 end
 
-figure(1); 
-plot(u_vec(:,1), u_vec(:,2));
-%plot(t(1,:), t(2,:), 'r');
-%hold on; plot(traj(:,1), traj(:,3),'gx');
-%hold on; quiver(traj(1:5:end,1), traj(1:5:end,3), 0.01 * cos(pitch(1:5:end)), 0.01 * sin(pitch(1:5:end)) ); 
+% Do some statistical analysis
+[RMSE, finalError, positionErrorTimeline] = analyzeTrajectory(x_vec, trajectory_nominal, constants);
+disp('RMSE of trajectory is: ');
+disp(RMSE);
+disp('Final error in meters is: ');
+disp(finalError);
 
-%plot(u_vec(2,:))
+figure(1); 
+plot(positionErrorTimeline);
 
 figure(2);
 % Visualize(trajectory_nominal,1);
