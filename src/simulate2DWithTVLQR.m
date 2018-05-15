@@ -31,31 +31,64 @@ x = [-1 -1 0 0 0 0];
 traj   = zeros(length(t), 6);
 pitch  = zeros(length(t), 1);
 
-
 % calculate nominal trajectory
 [trajectory_nominal, u_f_matrix, t, s0] = generate2DTrajectory(0.01, constants);
+constants.dt = t(2) - t(1);
 
 % Define start and endpoints
 start_p = [-0.05 0 0];
+<<<<<<< HEAD
+end_p = [0.2 -0.4 -2*pi];
+=======
 end_p = [0.25 0 -2*pi];
+>>>>>>> a75b91a88697962f913c84e8ae1582829d69f85b
 
 start_x = [start_p s0 0 0];
 end_x = [end_p 0 0 0];
 
+% Ramp into the trajectory
+x_in  = -constants.radius:0.01:-0.25;
+x_out = 0.25:0.01:constants.radius;
+
+vel_in_x = trajectory_nominal(1,4);
+vel_in_y = trajectory_nominal(1,5);
+pitch_rate_in = trajectory_nominal(1,6);
+
+% Rammp up the velocity
+t_ramp     = linspace(0,0.5,1.0/constants.dt);
+vel_x_ramp = linspace(0,vel_in_x,length(t_ramp));
+x_ramp = cumtrapz(t_ramp, vel_x_ramp);
+x_ramp = start_p(1) - flip(x_ramp);
+z_ramp = zeros(size(x_ramp));
+pitch_rate_ramp = linspace(0, pitch_rate_in, length(t_ramp));
+zeros_ramp = zeros(size(x_ramp));
+pitch_ramp = -0.1.* ones(size(x_ramp));
+
+ramp_in = [x_ramp' z_ramp' pitch_ramp' vel_x_ramp' zeros_ramp' zeros_ramp'];
+
+%ramp_out = [-flip(x_ramp)' 0.5-z_ramp' pitch_ramp' flip(vel_x_ramp)' zeros_ramp' zeros_ramp'];
 
 % Prepend acceleration point and append stopping point
-trajectory_nominal = [  start_x; 
+trajectory_nominal = [  ramp_in;
+                        %[start_p s0 0 0]; 
                         trajectory_nominal; 
-                        end_x];
-u_f_matrix = [[-constants.g*constants.m/2 -constants.g*constants.m/2];
+                        [end_p s0 0 0]];
+                        %ramp_out];
+                    
+u_f_ramp = repmat([-constants.g*constants.m/2 -constants.g*constants.m/2]', 1, length(t_ramp));                    
+u_f_matrix = [  u_f_ramp';
+                %[-constants.g*constants.m/2 -constants.g*constants.m/2];
                 u_f_matrix;
                 [-constants.g*constants.m/2 -constants.g*constants.m/2]];
+                %u_f_ramp'];
 
 % Get TVLQR controller for nominal trajectory
 [K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
 
 % starting position.
-x = [-1  0 0 0 0 0 ];
+%x = [0  0 0 s0 0 0 ];
+x = trajectory_nominal(1,:);
+
 
 % Hover controller.
 % x_f = [1 1 0 0 0 0];
@@ -68,7 +101,7 @@ x = [-1  0 0 0 0 0 ];
 
 k_idx = 1;
 
-for i = 2:length(t)
+for i = 2:20*length(t)
     % Wrap theta to [-2pi, 0] for continuous looping LQR.
     % Note, does some really bad things with start/stop trajectories
     %x_wrapped = [x(1:2) -wrapTo2Pi(-x(3)) x(4:6)];
@@ -85,6 +118,10 @@ for i = 2:length(t)
     
     % Assure that actuation limits are followed
     u = max(u, 0);
+    %u = min(u, constants.tmax);
+    
+    % Add some noise to the control
+    u = u; % + (0.5-rand([2 1])) * 0.1 * constants.tmax;
     
     % Simulate next step in dynamics
     [x,x_dot] = quadrotorDynamics2d(x, u, constants);
