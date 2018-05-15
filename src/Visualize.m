@@ -13,13 +13,13 @@ axis equal;
 grid on;
 plot3 (x_vec(:,1), zeros(num_t, 1), x_vec(:,2));
 hold on;
-%view(0,0);
+view(0,0);
 
 h  = draw_drone([], 'b',1,0);
 ht = hgtransform('Parent', gca); 
 
 set(h, 'Parent', ht);
-axis equal
+%axis equal
 ENU2NED = [0 1 0 0; 1 0 0 0; 0 0 -1 0; 0 0 0 1];
 %axis([-3 3 -3 3 -3 3])
 

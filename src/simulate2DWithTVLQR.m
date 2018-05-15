@@ -42,27 +42,7 @@ end_p = [0.2 -0.4 -2*pi];
 start_x = [start_p s0 0 0];
 end_x = [end_p 0 0 0];
 
-% Ramp into the trajectory
-vel_in_x = trajectory_nominal(1,4);
-vel_in_y = trajectory_nominal(1,5);
-pitch_rate_in = trajectory_nominal(1,6);
-
-% Rammp up the velocity
-ramp_time  = 2.0;
-t_ramp     = linspace(0,ramp_time,ramp_time/constants.dt);
-constant_a = (trajectory_nominal(1,4))/ramp_time;
-vel_x_ramp = 0.5*constant_a.*t_ramp.^2;
-%vel_x_ramp = linspace(0,vel_in_x,length(t_ramp));
-x_ramp = cumtrapz(t_ramp, vel_x_ramp);
-x_ramp = -flip(x_ramp);
-z_ramp = zeros(size(x_ramp));
-pitch_rate_ramp = linspace(0, pitch_rate_in, length(t_ramp));
-zeros_ramp = zeros(size(x_ramp));
-pitch_ramp = 0.2.* ones(size(x_ramp));
-
-ramp_in = [x_ramp' z_ramp' pitch_ramp' vel_x_ramp' zeros_ramp' zeros_ramp'];
-
-ramp_out = [-flip(x_ramp)' z_ramp' zeros_ramp'-2*pi flip(vel_x_ramp)' zeros_ramp' zeros_ramp'];
+[ramp_in, u_f_ramp_in, ramp_out, u_f_ramp_out] = generateRampingTrajectory(trajectory_nominal, constants);
 
 % Prepend acceleration point and append stopping point
 trajectory_nominal = [  ramp_in;
@@ -70,13 +50,12 @@ trajectory_nominal = [  ramp_in;
                         trajectory_nominal; 
                         %[end_p s0 0 0];
                         ramp_out];
-                    
-u_f_ramp = repmat([-constants.g*constants.m/2 -constants.g*constants.m/2]', 1, length(t_ramp));                    
-u_f_matrix = [  u_f_ramp';
+                                   
+u_f_matrix = [  u_f_ramp_in;
                 %[-constants.g*constants.m/2 -constants.g*constants.m/2];
                 u_f_matrix;
                 %[-constants.g*constants.m/2 -constants.g*constants.m/2]];
-                u_f_ramp'];
+                u_f_ramp_out];
 
 % Get TVLQR controller for nominal trajectory
 [K_matrix] = getTVLQRMatrix(trajectory_nominal, u_f_matrix, constants);
@@ -117,7 +96,7 @@ for i = 2:20*length(t)
     
     % Assure that actuation limits are followed
     u = max(u, 0);
-    %u = min(u, constants.tmax);
+    u = min(u, constants.tmax);
     
     % Add some noise to the control
     u = u; % + (0.5-rand([2 1])) * 0.1 * constants.tmax;
